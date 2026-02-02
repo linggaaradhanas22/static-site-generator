@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html_single(self):
@@ -31,6 +31,24 @@ class TestHTMLNode(unittest.TestCase):
             repr(node), 
             "HTMLNode(a, Click me, children: None, {'href': 'https://boot.dev'})"
         )
+    
+    def test_to_html_no_children(self):
+        node = LeafNode("p", "Hello, world!")
+        self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
+
+    def test_to_html_no_tag(self):
+        node = LeafNode(None, "Just some raw text here")
+        self.assertEqual(node.to_html(), "Just some raw text here")
+
+    def test_to_html_with_props(self):
+        node = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+        self.assertEqual(node.to_html(), '<a href="https://www.google.com">Click me!</a>')
+
+    def test_to_html_value_error(self):
+        # This ensures that your code correctly raises an error if no value is provided
+        node = LeafNode("p", None)
+        with self.assertRaises(ValueError):
+            node.to_html()
 
 if __name__ == "__main__":
     unittest.main()
