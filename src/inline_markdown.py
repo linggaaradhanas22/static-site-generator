@@ -112,3 +112,16 @@ def split_nodes_link(old_nodes):
             new_nodes.append(TextNode(original_text, TextType.TEXT))
             
     return new_nodes
+
+def text_to_textnodes(text):
+    # We start with a single node containing the entire raw string
+    nodes = [TextNode(text, TextType.TEXT)]
+    
+    # We process it through each "filter" one by one
+    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+    
+    return nodes
